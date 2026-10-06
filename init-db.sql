@@ -20,7 +20,8 @@ VALUES
     (4, 'Bobs Checking', 40000, 'checking'),
     (5, 'Bills Savings', 50000, 'savings'),
     (7, 'Nancy Checking', 70000, 'checking'),
-    (8, 'Nancy Savings', 80000, 'savings');
+    (8, 'Nancy Savings', 80000, 'savings'),
+    (10, 'Alex Checking', 250, 'checking');
 
 INSERT INTO accounts
     (account_number, name, amount, type, credit_limit)
@@ -28,3 +29,17 @@ VALUES
     (3, 'Jills Credit', -3000, 'credit', 10000),
     (6, 'Bills Credit', -60000, 'credit', 60000),
     (9, 'Nancy Credit', -90000, 'credit', 100000);
+
+-- CREATE ACCOUNTS HISTORY TABLE
+DROP TABLE IF EXISTS transactions;
+CREATE TABLE transactions (
+    id SERIAL PRIMARY KEY,
+    account_number INTEGER NOT NULL,
+    amount INTEGER NOT NULL,
+    type VARCHAR NOT NULL,
+    date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (account_number) REFERENCES accounts(account_number)
+);
+
+ALTER TABLE transactions ADD CONSTRAINT verify_type
+CHECK (type IN ('deposit', 'withdrawal'));

@@ -36,10 +36,10 @@ CREATE TABLE transactions (
     id SERIAL PRIMARY KEY,
     account_number INTEGER NOT NULL,
     amount INTEGER NOT NULL,
-    type VARCHAR NOT NULL,
-    date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    transaction_type VARCHAR NOT NULL,
+    created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (account_number) REFERENCES accounts(account_number)
 );
 
 ALTER TABLE transactions ADD CONSTRAINT verify_type
-CHECK (type IN ('deposit', 'withdrawal'));
+CHECK (transaction_type IN ('deposit', 'withdrawal'));

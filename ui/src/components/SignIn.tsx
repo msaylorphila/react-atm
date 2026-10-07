@@ -1,14 +1,17 @@
-import React, {useState} from 'react';
-import {Paper, Grid, TextField, Button} from '@mui/material';
+import { useState } from 'react';
+import {Paper, Grid, Button} from '@mui/material';
+import { NumericInput } from './NumericInput';
 
 type SignInProps = {
   accountNumberError: boolean;
   signIn: (accountNumber: number) => Promise<void>;
+  isLoading: boolean;
+  accountNumberErrorMessage: string;
 }
 
 export const SignIn = (props: SignInProps) => {
-  const {signIn, accountNumberError} = props;
-  const [accountNumber, setAccountNumber] = useState('');
+  const {signIn, accountNumberError, isLoading, accountNumberErrorMessage} = props;
+  const [accountNumber, setAccountNumber] = useState(0);
 
   return (
     <Paper sx={{ border: 20, borderBottom: 30, borderColor: 'white' }}> 
@@ -16,13 +19,15 @@ export const SignIn = (props: SignInProps) => {
             <Grid container>
               <Grid item xs={2} />
               <Grid item xs={8}>
-                <TextField 
-                  type='number' 
-                  variant='outlined' 
-                  label='Account Number' 
+                <NumericInput
+                  label='Account Number'
+                  variant='outlined'
                   sx={{ display: 'flex', margin: 'auto' }}
-                  onChange={(e) => setAccountNumber(e.target.value)}
+                  value={accountNumber}
+                  onChange={setAccountNumber}
+                  inputProps={{ min: 1, step: 1 }}
                   error={accountNumberError}
+                  helperText={accountNumberError ? accountNumberErrorMessage : ''}
                 />
               </Grid>
               <Grid item xs={2} />
@@ -35,7 +40,8 @@ export const SignIn = (props: SignInProps) => {
                 margin: 'auto',
                 marginTop: 2,
               }}
-              onClick={async() => await signIn(+accountNumber)}
+              onClick={async() => await signIn(accountNumber)}
+              disabled={isLoading}
             >
               Sign In
             </Button>

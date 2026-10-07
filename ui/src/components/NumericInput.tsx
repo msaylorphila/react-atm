@@ -17,7 +17,15 @@ export const NumericInput = ({
         {...props}
         type='number'
         inputMode='numeric'
+        inputProps={{
+            min: allowNegative ? undefined : 0,
+            ...props.inputProps
+        }}
         value={value === 0 ? '' : value}
         onChange={(e) => handleNumericInput(e.target.value, onChange)}
+        onKeyDown={(e) => {
+            if (!allowNegative && e.key === '-') e.preventDefault();
+            if (['e', 'E', '+'].includes(e.key)) e.preventDefault();
+        }}
     />
 );
